@@ -14,25 +14,31 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-module.exports = async (to, department, attachment) => {
-  const today = dayjs().format('D MMM YYYY')
-  const mailOptions = {
-    from: 'maetad.s@siamraj.com',
-    to,
-    subject: `รายงานการลงเวลาเข้างาน แผนก ${department}`,
-    html: `รายงานการลงเวลาเข้างาน แผนก ${department} ประจำวันที่ ${today}`,
-    attachments: [
-      {
-        filename: `report-${today}.xlsx`,
-        content: attachment,
-        contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      },
-    ],
-  }
+module.exports = async (to, department, attachment) => (
+  new Promise((resolve, reject) => {
 
-  console.log(`sening email to: ${to}`)
-  transporter.sendMail(mailOptions, (err, info) => {
-    console.log(`sent email to: ${to}`)
-    return Promise.resolve()
+    const today = dayjs().format('D MMM YYYY')
+    const mailOptions = {
+      from: 'maetad.s@siamraj.com',
+      to,
+      subject: `รายงานการลงเวลาเข้างาน แผนก ${department}`,
+      html: `รายงานการลงเวลาเข้างาน แผนก ${department} ประจำวันที่ ${today}`,
+      attachments: [
+        {
+          filename: `report-${today}.xlsx`,
+          content: attachment,
+          contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        },
+      ],
+    }
+
+    console.log(`sending email to: ${to}`)
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        return reject(err)
+      }
+      console.log(`sent email to: ${to}`)
+      return resolve()
+    })
   })
-}
+)

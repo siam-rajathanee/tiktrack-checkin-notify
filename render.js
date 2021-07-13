@@ -31,7 +31,7 @@ module.exports = (data) => {
       { header: 'ชื่อ', key: 'firstname' },
       { header: 'นามสกุล', key: 'lastname' },
       { header: 'เวลาเข้างาน', key: 'check_in' },
-      { header: 'ระยะทาง', key: 'distance' },
+      { header: 'ระยะทาง (ก.ม.)', key: 'distance' },
     ]
 
     data.members.filter(filter).forEach((member) => sheet.addRow(member))

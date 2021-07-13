@@ -6,12 +6,17 @@ const render = require('./render')
 
 const wait = async (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+const chunk = (arr, size) =>
+  Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+    arr.slice(i * size, i * size + size)
+  );
+
 module.exports.notify = async (event) => {
   const data = await query()
 
-  data.forEach(async (dept, index) => {
-    await wait(1500 * index)
+  for (let i = 0; i < data.length; i++) {
+    const dept = data[i]
     const buffer = await render(dept)
-    sendMail('maetad.s@siamraj.com', dept.name, buffer)
-  })
+    await sendMail('maetad.s@siamraj.com', dept.name, buffer)
+  }
 };
