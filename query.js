@@ -16,7 +16,7 @@ module.exports = async () => {
     }
   })
 
-  const subquery = knex('tat_data').whereRaw('date(checkin_time_server) = curdate() - interval 1 day')
+  const subquery = knex('tat_data').whereRaw('date(checkin_time_server) = curdate()')
 
   const rawData = await knex('users')
     .select(
